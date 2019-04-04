@@ -1,11 +1,16 @@
 package org.acme.quickstart;
 
+import java.io.IOException;
 
 import javax.inject.Inject;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 @Path("/hello")
@@ -25,5 +30,15 @@ public class GreetingResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
         return "hello";
+    }
+
+    @GET
+    @Path("/jsp")
+    public void getJSP(@Context HttpServletRequest request, @Context HttpServletResponse response)
+            throws ServletException, IOException {
+        CustomRequest customRequest = new CustomRequest(request);
+        CustomResponse customResponse = new CustomResponse(response);
+
+        request.getRequestDispatcher("/home.jsp").forward(customRequest, customResponse);
     }
 }
