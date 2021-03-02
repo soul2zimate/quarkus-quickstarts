@@ -1,79 +1,60 @@
-# Getting started with Quarkus
+1. mvn clean install
 
-This is a minimal CRUD service exposing a couple of endpoints over REST.
+2. java -Dusername=your_bugzilla_username -Dpassword=your_bugzilla_password -jar target/quarkus-app/quarkus-run.jar
 
-Under the hood, this demo uses:
+3. open http://127.0.0.1:8080/hello/request/1161448 make a request for an example bug https://bugzilla.redhat.com/show_bug.cgi?id=1161448
 
-- RESTEasy to expose the REST endpoints
-- REST-assured and JUnit 5 for endpoint testing
+4 you will see exception like:
 
-## Requirements
-
-To compile and run this demo you will need:
-
-- JDK 1.8+
-- GraalVM
-
-### Configuring GraalVM and JDK 1.8+
-
-Make sure that both the `GRAALVM_HOME` and `JAVA_HOME` environment variables have
-been set, and that a JDK 1.8+ `java` command is on the path.
-
-See the [Building a Native Executable guide](https://quarkus.io/guides/building-native-image-guide)
-for help setting up your environment.
-
-## Building the application
-
-Launch the Maven build on the checked out sources of this demo:
-
-> ./mvnw install
-
-### Live coding with Quarkus
-
-The Maven Quarkus plugin provides a development mode that supports
-live coding. To try this out:
-
-> ./mvnw quarkus:dev
-
-This command will leave Quarkus running in the foreground listening on port 8080.
-
-1. Visit the default endpoint: [http://127.0.0.1:8080](http://127.0.0.1:8080).
-    - Make a simple change to [src/main/resources/META-INF/resources/index.html](src/main/resources/META-INF/resources/index.html) file.
-    - Refresh the browser to see the updated page.
-2. Visit the `/hello` endpoint: [http://127.0.0.1:8080/hello](http://127.0.0.1:8080/hello)
-    - Update the response in [src/main/java/org/acme/quickstart/GreetingResource.java](src/main/java/org/acme/quickstart/GreetingResource.java). Replace `hello` with `hello there` in the `hello()` method.
-    - Refresh the browser. You should now see `hello there`.
-    - Undo the change, so the method returns `hello` again.
-    - Refresh the browser. You should now see `hello`.
-
-### Run Quarkus in JVM mode
-
-When you're done iterating in developer mode, you can run the application as a
-conventional jar file.
-
-First compile it:
-
-> ./mvnw install
-
-Then run it:
-
-> java -jar ./target/quarkus-app/quarkus-run.jar
-
-Have a look at how fast it boots, or measure the total native memory consumption.
-
-### Run Quarkus as a native executable
-
-You can also create a native executable from this application without making any
-source code changes. A native executable removes the dependency on the JVM:
-everything needed to run the application on the target platform is included in
-the executable, allowing the application to run with minimal resource overhead.
-
-Compiling a native executable takes a bit longer, as GraalVM performs additional
-steps to remove unnecessary codepaths. Use the  `native` profile to compile a
-native executable:
-
-> ./mvnw install -Dnative
-
-After getting a cup of coffee, you'll be able to run this executable directly:
-
-> ./target/getting-started-1.0.0-SNAPSHOT-runner
+2021-03-02 11:38:10,600 ERROR [io.qua.ver.htt.run.QuarkusErrorHandler] (executor-thread-1) HTTP Request to /hello failed, error id: 0c825430-5faf-4332-8164-65fbc53b79ba-1: org.jboss.resteasy.spi.UnhandledException: javax.xml.parsers.FactoryConfigurationError: Provider for javax.xml.parsers.SAXParserFactory cannot be found
+at org.jboss.resteasy.core.ExceptionHandler.handleApplicationException(ExceptionHandler.java:106)
+at org.jboss.resteasy.core.ExceptionHandler.handleException(ExceptionHandler.java:372)
+at org.jboss.resteasy.core.SynchronousDispatcher.writeException(SynchronousDispatcher.java:218)
+at org.jboss.resteasy.core.SynchronousDispatcher.invoke(SynchronousDispatcher.java:519)
+at org.jboss.resteasy.core.SynchronousDispatcher.lambda$invoke$4(SynchronousDispatcher.java:261)
+at org.jboss.resteasy.core.SynchronousDispatcher.lambda$preprocess$0(SynchronousDispatcher.java:161)
+at org.jboss.resteasy.core.interception.jaxrs.PreMatchContainerRequestContext.filter(PreMatchContainerRequestContext.java:364)
+at org.jboss.resteasy.core.SynchronousDispatcher.preprocess(SynchronousDispatcher.java:164)
+at org.jboss.resteasy.core.SynchronousDispatcher.invoke(SynchronousDispatcher.java:247)
+at io.quarkus.resteasy.runtime.standalone.RequestDispatcher.service(RequestDispatcher.java:73)
+at io.quarkus.resteasy.runtime.standalone.VertxRequestHandler.dispatch(VertxRequestHandler.java:138)
+at io.quarkus.resteasy.runtime.standalone.VertxRequestHandler.access$000(VertxRequestHandler.java:41)
+at io.quarkus.resteasy.runtime.standalone.VertxRequestHandler$1.run(VertxRequestHandler.java:93)
+at org.jboss.threads.EnhancedQueueExecutor$Task.run(EnhancedQueueExecutor.java:2415)
+at org.jboss.threads.EnhancedQueueExecutor$ThreadBody.run(EnhancedQueueExecutor.java:1452)
+at org.jboss.threads.DelegatingRunnable.run(DelegatingRunnable.java:29)
+at org.jboss.threads.ThreadLocalResettingRunnable.run(ThreadLocalResettingRunnable.java:29)
+at java.base/java.lang.Thread.run(Thread.java:834)
+at org.jboss.threads.JBossThread.run(JBossThread.java:501)
+Caused by: javax.xml.parsers.FactoryConfigurationError: Provider for javax.xml.parsers.SAXParserFactory cannot be found
+at javax.xml.parsers.SAXParserFactory.newInstance(Unknown Source)
+at org.apache.xmlrpc.util.SAXParsers.<clinit>(SAXParsers.java:34)
+at org.apache.xmlrpc.client.XmlRpcStreamTransport.newXMLReader(XmlRpcStreamTransport.java:176)
+at org.apache.xmlrpc.client.XmlRpcStreamTransport.readResponse(XmlRpcStreamTransport.java:181)
+at org.apache.xmlrpc.client.XmlRpcStreamTransport.sendRequest(XmlRpcStreamTransport.java:156)
+at org.apache.xmlrpc.client.XmlRpcHttpTransport.sendRequest(XmlRpcHttpTransport.java:143)
+at org.apache.xmlrpc.client.XmlRpcSunHttpTransport.sendRequest(XmlRpcSunHttpTransport.java:69)
+at org.apache.xmlrpc.client.XmlRpcClientWorker.execute(XmlRpcClientWorker.java:56)
+at org.apache.xmlrpc.client.XmlRpcClient.execute(XmlRpcClient.java:167)
+at org.apache.xmlrpc.client.XmlRpcClient.execute(XmlRpcClient.java:137)
+at org.apache.xmlrpc.client.XmlRpcClient.execute(XmlRpcClient.java:126)
+at org.acme.getting.started.BugzillaService.executeRequest(BugzillaService.java:42)
+at org.acme.getting.started.BugzillaService.getIssue(BugzillaService.java:33)
+at org.acme.getting.started.BugzillaService_ClientProxy.getIssue(BugzillaService_ClientProxy.zig:188)
+at org.acme.getting.started.GreetingResource.hello(GreetingResource.java:37)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+at org.jboss.resteasy.core.MethodInjectorImpl.invoke(MethodInjectorImpl.java:170)
+at org.jboss.resteasy.core.MethodInjectorImpl.invoke(MethodInjectorImpl.java:130)
+at org.jboss.resteasy.core.ResourceMethodInvoker.internalInvokeOnTarget(ResourceMethodInvoker.java:643)
+at org.jboss.resteasy.core.ResourceMethodInvoker.invokeOnTargetAfterFilter(ResourceMethodInvoker.java:507)
+at org.jboss.resteasy.core.ResourceMethodInvoker.lambda$invokeOnTarget$2(ResourceMethodInvoker.java:457)
+at org.jboss.resteasy.core.interception.jaxrs.PreMatchContainerRequestContext.filter(PreMatchContainerRequestContext.java:364)
+at org.jboss.resteasy.core.ResourceMethodInvoker.invokeOnTarget(ResourceMethodInvoker.java:459)
+at org.jboss.resteasy.core.ResourceMethodInvoker.invoke(ResourceMethodInvoker.java:419)
+at org.jboss.resteasy.core.ResourceMethodInvoker.invoke(ResourceMethodInvoker.java:393)
+at org.jboss.resteasy.core.ResourceMethodInvoker.invoke(ResourceMethodInvoker.java:68)
+at org.jboss.resteasy.core.SynchronousDispatcher.invoke(SynchronousDispatcher.java:492)
+... 15 more
